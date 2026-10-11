@@ -298,9 +298,6 @@ dialog::backdrop { background: rgba(10,14,25,.45); }
 .footer-credit,
 .footer-disclaimer { margin: 0; }
 .footer-credit strong { color: var(--text); }
-.footer-links { display: flex; gap: 1rem; }
-.footer-links a { color: var(--accent); font-weight: 700; text-decoration: none; }
-.footer-links a:hover { text-decoration: underline; }
 .footer-disclaimer { font-size: .72rem; }
 .muted { color: var(--text-muted); font-size: .9rem; }
 .visually-hidden {
