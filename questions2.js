@@ -65,8 +65,8 @@ const QUESTIONS_BATCH2 = [
 { id:"xb-012", topic:"Variables & Assignment", difficulty:"Intermediate",
   prompt:"What is printed?",
   code:"a = 10\nb = 3\na = a MOD b\nb = a * 2\nPRINT a + b",
-  options:["4","2","3","6"], answerIndex:0,
-  explanation:"a = 10 MOD 3 = 1; b = 2; total 3? No — a+b = 1+2 = 3. Recheck: 1 + 2 = 3.",
+  options:["4","2","3","6"], answerIndex:2,
+  explanation:"a = 10 MOD 3 = 1; then b = a * 2 = 2. PRINT a + b → 3.",
   tags:["assignment","modulo"], estimatedSeconds:45 },
 
 /* ---------- Arithmetic & Precedence (12) ---------- */
@@ -743,7 +743,7 @@ const QUESTIONS_BATCH2 = [
 { id:"xb-143", topic:"Strings", difficulty:"Beginner",
   prompt:"What is printed?",
   code:"s = \"code\"\nPRINT upper(s)",
-  options:["code","Code","CODE","codE"], answerIndex:2,
+  options:["lowercase","text","CODE","cod3"], answerIndex:2,
   explanation:"upper() converts every letter to uppercase → \"CODE\".", tags:["strings"], estimatedSeconds:25 },
 { id:"xb-144", topic:"Strings", difficulty:"Advanced",
   prompt:"How many adjacent equal pairs are counted in \"AABBCC\"?",
@@ -922,10 +922,10 @@ const QUESTIONS_BATCH2 = [
   options:["3","15","2","4"], answerIndex:3,
   explanation:"15 = 1111 has four 1-bits.", tags:["bitwise","bit-count"], estimatedSeconds:55 },
 { id:"xb-178", topic:"Bitwise Operators", difficulty:"Advanced",
-  prompt:"What is printed? (Equal precedence, left to right.)",
+  prompt:"What is printed? (C-style precedence: << and >> bind tighter than + and -.)",
   code:"PRINT 7 << 1 + 7 >> 1",
   options:["10","21","17","14"], answerIndex:2,
-  explanation:"+ binds tighter than shifts here as written: 7 << (1+7) would overflow the intent — but with left-to-right evaluation of equal-precedence shifts and addition grouped first: (7<<1) + (7>>1) = 14 + 3 = 17.",
+  explanation:"Shifts bind tighter than addition, so this parses as (7 << 1) + (7 >> 1) = 14 + 3. PRINT → 17.",
   tags:["bitwise","precedence"], estimatedSeconds:70 },
 { id:"xb-179", topic:"Bitwise Operators", difficulty:"Advanced",
   prompt:"What is printed? (Bit toggle.)",
@@ -1004,14 +1004,14 @@ const QUESTIONS_BATCH2 = [
 { id:"xb-193", topic:"Stacks & Queues", difficulty:"Beginner",
   prompt:"What is printed? (PUSH/POP act on the top.)",
   code:"S = empty\nPUSH(S, 2)\nPUSH(S, 4)\nPUSH(S, 6)\nPOP(S)\nPUSH(S, 8)\nPRINT TOP(S) + SIZE(S)",
-  options:["10","8","12","6"], answerIndex:0,
-  explanation:"Stack: [2,4] after the pop, then [2,4,8]. TOP = 8, SIZE = 3? No — 8+3 = 11? Recheck: TOP 8 + SIZE 3 = 11.",
+  options:["8","11","10","6"], answerIndex:1,
+  explanation:"PUSH 2, 4, 6 → Stack: [2, 4, 6]. POP removes 6 → [2, 4]. PUSH 8 → [2, 4, 8]. TOP = 8, SIZE = 3. Output: 8 + 3 → 11.",
   tags:["stack"], estimatedSeconds:40 },
 { id:"xb-194", topic:"Stacks & Queues", difficulty:"Beginner",
   prompt:"What is printed? (ENQUEUE at rear, DEQUEUE from front.)",
   code:"Q = empty\nENQUEUE(Q, 3)\nENQUEUE(Q, 6)\nENQUEUE(Q, 9)\nDEQUEUE(Q)\nPRINT FRONT(Q) + SIZE(Q)",
-  options:["12","6","8","9"], answerIndex:0,
-  explanation:"After the dequeue: Q = [6, 9]. FRONT = 6, SIZE = 2 → 8. Recheck: 6+2 = 8.",
+  options:["12","6","8","9"], answerIndex:2,
+  explanation:"ENQUEUE 3, 6, 9 → Queue: [3, 6, 9]. DEQUEUE removes 3 → [6, 9]. FRONT = 6, SIZE = 2. Output: 6 + 2 → 8.",
   tags:["queue"], estimatedSeconds:40 },
 { id:"xb-195", topic:"Stacks & Queues", difficulty:"Intermediate",
   prompt:"What is printed?",
@@ -1042,7 +1042,106 @@ const QUESTIONS_BATCH2 = [
   prompt:"What is printed? (Circular queue of capacity 3.)",
   code:"CircularQueue Q(capacity = 3)\nENQUEUE(Q, 10)\nENQUEUE(Q, 20)\nENQUEUE(Q, 30)\nDEQUEUE(Q)\nENQUEUE(Q, 40)\nPRINT FRONT(Q)\nPRINT REAR(Q)",
   options:["10 then 40","20 then 30","20 then 40","30 then 40"], answerIndex:2,
-  explanation:"Queue [10,20,30] → dequeue removes 10 → enqueue 40 wraps circularly → [20,30,40]. Front 20, rear 40.", tags:["queue","circular"], estimatedSeconds:75 }
+  explanation:"Queue [10,20,30] → dequeue removes 10 → enqueue 40 wraps circularly → [20,30,40]. Front 20, rear 40.", tags:["queue","circular"], estimatedSeconds:75 },
+/* ---------- Stacks & Queues (completes to 12) ---------- */
+{ id:"xb-201", topic:"Stacks & Queues", difficulty:"Advanced",
+  prompt:"What is printed? (M's top always holds the current minimum.)",
+  code:"void minTrack()\n    Stack S = empty\n    Stack M = empty\n    PUSH(S, 7)\n    PUSH(M, 7)\n    PUSH(S, 3)\n    PUSH(M, 3)\n    PUSH(S, 9)\n    PUSH(M, TOP(M))\n    PUSH(S, 1)\n    PUSH(M, 1)\n    POP(S)\n    POP(M)\n    PRINT TOP(M)\nend function",
+  options:["7","9","3","1"], answerIndex:2,
+  explanation:"M mirrors S with the running minimum on top: [7] → [7,3] → [7,3,3] (9 is larger, so the old min 3 is copied) → [7,3,3,1]. The paired POP removes the 1. PRINT TOP(M) → 3.",
+  tags:["stack","min-stack"], estimatedSeconds:80 },
+
+{ id:"xb-202", topic:"Stacks & Queues", difficulty:"Intermediate",
+  prompt:"What is printed?",
+  code:"void popCount()\n    Stack S = empty\n    Integer n = 5\n    WHILE n > 0\n        PUSH(S, n)\n        n = n - 1\n    END WHILE\n    Integer c = 0\n    WHILE S is not empty\n        IF TOP(S) MOD 2 == 0 THEN\n            c = c + 1\n        END IF\n        POP(S)\n    END WHILE\n    PRINT c\nend function",
+  options:["5","3","2","4"], answerIndex:2,
+  explanation:"Stack fills [1, 2, 3, 4, 5] (5 on top). Pops run 5, 4, 3, 2, 1; the even values 4 and 2 increment c. PRINT c → 2.",
+  tags:["stack","counting"], estimatedSeconds:60 },
+
+/* ---------- Mixed Placement-Level (new, 12) ---------- */
+{ id:"xb-203", topic:"Mixed Placement-Level", difficulty:"Intermediate",
+  prompt:"What is printed? (Add on multiples of 3, subtract on other multiples of 5.)",
+  code:"s = 0\nFOR i = 1 TO 10\n    IF i MOD 3 == 0 THEN\n        s = s + i\n    ELSE IF i MOD 5 == 0 THEN\n        s = s - i\n    END IF\nEND FOR\nPRINT s",
+  options:["18","3","-3","33"], answerIndex:1,
+  explanation:"Multiples of 3 in 1..10: 3, 6, 9 → +18. Remaining multiples of 5 (5 and 10) → −15. PRINT s → 3.",
+  tags:["modulo","accumulator"], estimatedSeconds:60 },
+
+{ id:"xb-204", topic:"Mixed Placement-Level", difficulty:"Intermediate",
+  prompt:"What is printed?",
+  code:"n = 392\neven = 0\nodd = 0\nWHILE n > 0\n    d = n MOD 10\n    IF d MOD 2 == 0 THEN\n        even = even + d\n    ELSE\n        odd = odd + d\n    END IF\n    n = n / 10\nEND WHILE\nPRINT even - odd",
+  options:["10","-10","2","-12"], answerIndex:1,
+  explanation:"Digits from the right: 2 (even → even=2), 9 (odd → odd=9), 3 (odd → odd=12). PRINT even - odd → -10.",
+  tags:["digits","modulo"], estimatedSeconds:60 },
+
+{ id:"xb-205", topic:"Mixed Placement-Level", difficulty:"Intermediate",
+  prompt:"What is printed? (In-place pair swap.)",
+  code:"A = [1, 2, 3, 4, 5, 6]\nFOR i = 0 TO 4 STEP 2\n    t = A[i]\n    A[i] = A[i+1]\n    A[i+1] = t\nEND FOR\nFOR i = 0 TO 5\n    PRINT A[i]\nEND FOR",
+  options:["1 2 3 4 5 6","6 5 4 3 2 1","2 1 4 3 6 5","2 1 4 3 5 6"], answerIndex:2,
+  explanation:"Each even-index pair is swapped: (1,2)→(2,1), (3,4)→(4,3), (5,6)→(6,5). Output → 2 1 4 3 6 5.",
+  tags:["arrays","swap"], estimatedSeconds:60 },
+
+{ id:"xb-206", topic:"Mixed Placement-Level", difficulty:"Intermediate",
+  prompt:"What is printed?",
+  code:"s = \"AB1C2D\"\nt = \"\"\nFOR i = 0 TO length(s)-1\n    IF s[i] >= \"0\" AND s[i] <= \"9\" THEN CONTINUE\n    t = t + s[i]\nEND FOR\nPRINT t",
+  options:["AB1C2D","ABCD","12","ABC"], answerIndex:1,
+  explanation:"Digits are skipped by CONTINUE; letters are appended in order: A, B, C, D. PRINT t → ABCD.",
+  tags:["strings","continue"], estimatedSeconds:55 },
+
+{ id:"xb-207", topic:"Mixed Placement-Level", difficulty:"Intermediate",
+  prompt:"What is printed? (Integer division.)",
+  code:"a = 100\nb = 0\nWHILE a > 10\n    a = a / 2\n    b = b + 5\nEND WHILE\nPRINT a + b",
+  options:["26","25","30","21"], answerIndex:0,
+  explanation:"a: 100 → 50 → 25 → 12 → 6 (four passes; 6 > 10 is false). b gains 5 per pass → 20. PRINT a + b → 26.",
+  tags:["while","integer-division"], estimatedSeconds:60 },
+
+{ id:"xb-208", topic:"Mixed Placement-Level", difficulty:"Advanced",
+  prompt:"What is printed? (MOD and * share precedence, left to right.)",
+  code:"a = 5\nb = 2\nr = (a * b + 4 MOD 3 > 9) ? a + b : a - b\nPRINT r",
+  options:["3","7","11","8"], answerIndex:1,
+  explanation:"4 MOD 3 = 1; a * b = 10; 10 + 1 = 11 > 9 is TRUE, so the ternary takes a + b. PRINT r → 7.",
+  tags:["precedence","ternary"], estimatedSeconds:70 },
+
+{ id:"xb-209", topic:"Mixed Placement-Level", difficulty:"Advanced",
+  prompt:"How many times is count incremented? (BREAK only exits the innermost loop.)",
+  code:"count = 0\nFOR i = 1 TO 3\n    FOR j = 1 TO 3\n        IF i * j >= 4 THEN BREAK\n        count = count + 1\n    END FOR\nEND FOR\nPRINT count",
+  options:["9","5","6","7"], answerIndex:1,
+  explanation:"i=1: products 1, 2, 3 all count, no break → 3. i=2: j=1 counts (4), j=2 gives 4 → BREAK → 4. i=3: j=1 counts (5), j=2 breaks. PRINT count → 5.",
+  tags:["nested","break"], estimatedSeconds:80 },
+
+{ id:"xb-210", topic:"Mixed Placement-Level", difficulty:"Advanced",
+  prompt:"What is the complete output? (PRINT happens before the recursive call.)",
+  code:"FUNCTION f(n)\n    IF n == 0 THEN RETURN 0\n    PRINT n\n    RETURN f(n - 2)\nEND FUNCTION\nx = f(6)\nPRINT \"DONE\"",
+  options:["2 4 6 DONE","6 4 2","6 4 2 DONE","DONE 6 4 2"], answerIndex:2,
+  explanation:"PRINT runs before each recursive call on the way down: 6, 4, 2; then the base case returns and DONE prints. Output → 6 4 2 DONE.",
+  tags:["recursion","output-order"], estimatedSeconds:70 },
+
+{ id:"xb-211", topic:"Mixed Placement-Level", difficulty:"Advanced",
+  prompt:"What is printed? (& = bitwise AND, >> = right shift.)",
+  code:"n = 13\nc = 0\nWHILE n > 0\n    c = c + (n & 1)\n    n = n >> 1\nEND WHILE\nPRINT c",
+  options:["2","4","3","13"], answerIndex:2,
+  explanation:"13 = 1101 in binary; (n & 1) adds 1 for each set bit: 1, 0, 1, 1. PRINT c → 3.",
+  tags:["bitwise","bit-count"], estimatedSeconds:70 },
+
+{ id:"xb-212", topic:"Mixed Placement-Level", difficulty:"Intermediate",
+  prompt:"What is printed? (Maximum row sum.)",
+  code:"grid = [[3, 8], [5, 2], [1, 9]]\nbest = 0\nFOR i = 0 TO 2\n    s = grid[i][0] + grid[i][1]\n    IF s > best THEN best = s\nEND FOR\nPRINT best",
+  options:["10","11","9","17"], answerIndex:1,
+  explanation:"Row sums: 11, 7, 10. The running maximum ends at 11. PRINT best → 11.",
+  tags:["2d-array","max"], estimatedSeconds:55 },
+
+{ id:"xb-213", topic:"Mixed Placement-Level", difficulty:"Intermediate",
+  prompt:"What is printed? (Rotate = dequeue the front and enqueue it at the rear.)",
+  code:"Q = empty\nFOR i = 1 TO 3\n    ENQUEUE(Q, i * 10)\nEND FOR\nFOR k = 1 TO 2\n    ENQUEUE(Q, DEQUEUE(Q))\nEND FOR\nPRINT FRONT(Q)",
+  options:["10","20","30","ERROR"], answerIndex:2,
+  explanation:"Queue [10, 20, 30]. Each rotate moves the front to the rear: after k=1 → [20, 30, 10]; after k=2 → [30, 10, 20]. FRONT(Q) → 30.",
+  tags:["queue","rotation"], estimatedSeconds:60 },
+
+{ id:"xb-214", topic:"Mixed Placement-Level", difficulty:"Intermediate",
+  prompt:"What is printed? (Add even lengths, subtract 1 for odd lengths.)",
+  code:"words = [\"AT\", \"BIT\", \"COLD\"]\ntotal = 0\nFOR i = 0 TO 2\n    IF length(words[i]) MOD 2 == 0 THEN\n        total = total + length(words[i])\n    ELSE\n        total = total - 1\n    END IF\nEND FOR\nPRINT total",
+  options:["9","5","3","7"], answerIndex:1,
+  explanation:"Lengths 2, 3, 4: +2, then −1 (odd length), then +4. PRINT total → 5.",
+  tags:["strings","accumulator"], estimatedSeconds:55 }
 ];
 
 /* Validate this bank independently, then add it to the app pool when the
@@ -1050,6 +1149,7 @@ const QUESTIONS_BATCH2 = [
 (function validateBatch2() {
   const ids = new Set();
   const requiredDifficulties = new Set(["Beginner", "Intermediate", "Advanced"]);
+  if (QUESTIONS_BATCH2.length !== 214) throw new Error("Question bank batch 2 must contain exactly 214 questions.");
   for (const q of QUESTIONS_BATCH2) {
     if (!q.id || ids.has(q.id)) throw new Error("Duplicate or missing batch 2 question id: " + q.id);
     ids.add(q.id);

@@ -25,7 +25,7 @@ validated answer key with a full explanation.
 
 It is a complete, self-contained practice product:
 
-- ✍️ **250 original questions** across 18 topics and 3 difficulty levels
+- ✍️ **264 original questions** across 18 topics and 3 difficulty levels
 - ⏱️ **Timed tests** with an auto-submitting deadline timer
 - 🧭 **Question palette**, mark-for-review, bookmarks, clear-answer
 - 📊 **Results** with topic/difficulty breakdowns and per-question explanations
@@ -81,7 +81,8 @@ pseudoprep/
 ├── style.css       # Styling, theming, responsive layouts
 ├── script.js       # Application logic (state, timer, scoring, persistence)
 ├── questions.js    # Original 50-question bank (validated at load)
-├── questions2.js   # Original 200-question batch, merged into the app pool
+├── questions2.js   # Original 214-question batch, merged into the app pool
+├── validate-bank.js # Schema, answer-key, artifact, bias, and arithmetic validator
 ├── tests.html      # Lightweight test harness for core logic
 └── README.md
 ```
@@ -227,6 +228,9 @@ Core scoring logic is covered by the test harness in `tests.html`:
   explanation, and tags. Both banks are validated at load; when both scripts
   are included, the 200-question batch is appended to `QUESTIONS` while
   remaining available separately as `QUESTIONS_BATCH2`.
+- **`validate-bank.js`** — optional validator for schema rules, duplicate
+  options, drafting artifacts, explanation/key consistency, answer-index bias,
+  and safe arithmetic in straight-line questions without using `eval`.
 - **`script.js`** — one persisted `state` object (prefs, attempts, bookmarks,
   mastered, recoverable session) plus one ephemeral runtime `session`.
   Scoring lives in a single **pure** function, `computeResults()`, shared by
