@@ -253,17 +253,6 @@ fieldset.field { border: 1px solid var(--border); border-radius: 9px; padding: .
 .review-filters label { display: block; font-weight: 600; margin-bottom: .25rem; }
 .review-filters select { width: 100%; padding: .45rem; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text); }
 
-/* ---------- conventions ---------- */
-.conv-list code {
-  color: var(--accent-strong);
-  background: var(--accent-soft);
-  border: 1px solid rgba(29, 107, 82, .12);
-  padding: .08rem .38rem;
-  border-radius: 5px;
-  font: 700 .86em/1.4 ui-monospace, Consolas, monospace;
-  white-space: nowrap;
-}
-
 /* ---------- dialog / toast ---------- */
 dialog {
   border: 1px solid var(--border); border-radius: var(--radius);
@@ -302,7 +291,7 @@ dialog::backdrop { background: rgba(10,14,25,.45); }
 .footer-brand strong { color: var(--accent); letter-spacing: -.02em; }
 .footer-brand span { color: var(--text-muted); }
 .footer-note { max-width: 680px; margin: .45rem auto; line-height: 1.6; }
-.footer-note a { color: var(--accent); font-weight: 700; text-decoration: none; }
+.footer-note a { display: inline-block; margin-left: .4rem; color: var(--accent); font-weight: 700; text-decoration: none; }
 .footer-note a:hover { text-decoration: underline; }
 .footer-credit { margin: 1rem 0 0; font-size: .72rem; }
 .footer-credit strong { color: var(--text); }

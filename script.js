@@ -94,7 +94,7 @@ function toast(msg) {
 }
 
 /* ---------------- views / router ---------------- */
-const VIEWS = ["home", "setup", "quiz", "results", "review", "conventions"];
+const VIEWS = ["home", "setup", "quiz", "results", "review"];
 function showView(name) {
   for (const v of VIEWS) {
     const el = $("view-" + v);
