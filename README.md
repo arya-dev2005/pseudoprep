@@ -25,7 +25,7 @@ validated answer key with a full explanation.
 
 It is a complete, self-contained practice product:
 
-- ✍️ **50 original questions** across 18 topics and 3 difficulty levels
+- ✍️ **250 original questions** across 18 topics and 3 difficulty levels
 - ⏱️ **Timed tests** with an auto-submitting deadline timer
 - 🧭 **Question palette**, mark-for-review, bookmarks, clear-answer
 - 📊 **Results** with topic/difficulty breakdowns and per-question explanations
@@ -80,7 +80,8 @@ pseudoprep/
 ├── index.html      # App structure (all views)
 ├── style.css       # Styling, theming, responsive layouts
 ├── script.js       # Application logic (state, timer, scoring, persistence)
-├── questions.js    # Question bank (data only, validated at load)
+├── questions.js    # Original 50-question bank (validated at load)
+├── questions2.js   # Original 200-question batch, merged into the app pool
 ├── tests.html      # Lightweight test harness for core logic
 └── README.md
 ```
@@ -221,9 +222,11 @@ Core scoring logic is covered by the test harness in `tests.html`:
 
 ## 🏗️ Architecture (brief)
 
-- **`questions.js`** — pure data. Every question has a stable ID, topic,
-  difficulty, options, a single 0-based `answerIndex`, an explanation, and
-  tags. The bank is validated at load.
+- **`questions.js`** and **`questions2.js`** — pure data. Each question has a
+  stable ID, topic, difficulty, options, a single 0-based `answerIndex`, an
+  explanation, and tags. Both banks are validated at load; when both scripts
+  are included, the 200-question batch is appended to `QUESTIONS` while
+  remaining available separately as `QUESTIONS_BATCH2`.
 - **`script.js`** — one persisted `state` object (prefs, attempts, bookmarks,
   mastered, recoverable session) plus one ephemeral runtime `session`.
   Scoring lives in a single **pure** function, `computeResults()`, shared by

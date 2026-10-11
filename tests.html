@@ -8,6 +8,7 @@
 <p>These smoke tests load the same question bank and scoring helper used by the app.</p>
 <div id="out"></div>
 <script src="questions.js"></script>
+<script src="questions2.js"></script>
 <script src="script.js"></script>
 <script>
 "use strict";
@@ -65,7 +66,7 @@ check("bank schema valid", QUESTIONS.every(q =>
 check("unique question ids", new Set(QUESTIONS.map(q => q.id)).size === QUESTIONS.length);
 
 // 7. requested bank coverage
-check("exactly 50 questions across 18 topics", QUESTIONS.length === 50 && TOPICS.length === 18 &&
+check("exactly 250 questions across 18 topics", QUESTIONS.length === 250 && QUESTIONS_BATCH2.length === 200 && TOPICS.length === 18 &&
   new Set(QUESTIONS.map(q => q.topic)).size === 18);
 check("all three difficulty levels are represented", ["Beginner", "Intermediate", "Advanced"]
   .every(level => QUESTIONS.some(q => q.difficulty === level)));
