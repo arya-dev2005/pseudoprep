@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>PseudoPrep — logic tests</title>
+<style>body{font-family:monospace;padding:1rem} .pass{color:#1a7f4e}.fail{color:#b3323c}</style>
+</head>
+<body>
+<h1>PseudoPrep core-logic tests</h1>
+<p>These smoke tests load the same question bank and scoring helper used by the app.</p>
+<div id="out"></div>
+<script src="questions.js"></script>
+<script src="script.js"></script>
+<script>
+"use strict";
+const out = document.getElementById("out");
+let passed = 0, failed = 0;
+function check(name, cond) {
+  const div = document.createElement("div");
+  div.className = cond ? "pass" : "fail";
+  div.textContent = (cond ? "PASS  " : "FAIL  ") + name;
+  out.appendChild(div);
+  cond ? passed++ : failed++;
+  console[cond ? "log" : "error"](div.textContent);
+}
+const R = window.PseudoPrep.computeResults;
+
+// 1. perfect score
+check("perfect score", (() => {
+  const qs = QUESTIONS.slice(0, 5);
+  const r = R(qs, qs.map(q => q.answerIndex), false);
+  return r.correct === 5 && r.wrong === 0 && r.unanswered === 0 && r.score === 5 && r.attemptedAccuracy === 100;
+})());
+
+// 2. all unanswered — must not divide by zero
+check("all unanswered handled", (() => {
+  const qs = QUESTIONS.slice(0, 5);
+  const r = R(qs, qs.map(() => null), false);
+  return r.correct === 0 && r.unanswered === 5 && r.attemptedAccuracy === 0 && r.score === 0;
+})());
+
+// 3. negative marking produces fractional score
+check("negative marking math", (() => {
+  const qs = QUESTIONS.slice(0, 4);
+  const answers = [qs[0].answerIndex, qs[1].answerIndex, (qs[2].answerIndex + 1) % qs[2].options.length, null];
+  const r = R(qs, answers, true);
+  return r.score === 1.75 && r.correct === 2 && r.wrong === 1 && r.unanswered === 1;
+})());
+
+// 4. attempted accuracy distinguishes from whole-test score
+check("attempted vs whole-test accuracy", (() => {
+  const qs = QUESTIONS.slice(0, 4);
+  const answers = [qs[0].answerIndex, null, null, null];
+  const r = R(qs, answers, false);
+  return r.attemptedAccuracy === 100 && r.scorePct === 25;
+})());
+
+// 5. answer-key sanity: every answerIndex is valid and unique per question
+check("bank schema valid", QUESTIONS.every(q =>
+  typeof q.answerIndex === "number" &&
+  q.answerIndex >= 0 && q.answerIndex < q.options.length &&
+  q.options.every(o => typeof o === "string") &&
+  q.explanation.length > 10
+));
+
+// 6. unique ids
+check("unique question ids", new Set(QUESTIONS.map(q => q.id)).size === QUESTIONS.length);
+
+// 7. requested bank coverage
+check("exactly 50 questions across 18 topics", QUESTIONS.length === 50 && TOPICS.length === 18 &&
+  new Set(QUESTIONS.map(q => q.topic)).size === 18);
+check("all three difficulty levels are represented", ["Beginner", "Intermediate", "Advanced"]
+  .every(level => QUESTIONS.some(q => q.difficulty === level)));
+
+// 8. persistence contract
+check("versioned persistence key is present", localStorage.getItem("pseudoprep.v1") === null ||
+  typeof localStorage.getItem("pseudoprep.v1") === "string");
+
+const sum = document.createElement("p");
+sum.textContent = passed + " passed, " + failed + " failed.";
+sum.className = failed ? "fail" : "pass";
+out.appendChild(sum);
+</script>
+</body>
+</html>

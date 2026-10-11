@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="PseudoPrep — practise and trace pseudocode questions for placement assessments. Independent educational project, not affiliated with any company.">
+<title>PseudoPrep — Think. Trace. Solve.</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="#" data-nav="home" aria-label="PseudoPrep home">
+    <span class="brand-mark">&lt;/&gt;</span>
+    <span>PseudoPrep<small>Think. Trace. Solve.</small></span>
+  </a>
+  <nav aria-label="Primary">
+    <button class="btn ghost" data-nav="home">Home</button>
+    <button class="btn ghost" data-nav="review">Review</button>
+    <button class="btn ghost" data-nav="conventions">Conventions</button>
+  </nav>
+</header>
+
+<main id="app">
+
+  <!-- ================= HOME ================= -->
+  <section id="view-home" class="view" aria-labelledby="home-heading">
+    <h2 id="home-heading" class="visually-hidden">Dashboard</h2>
+    <div class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Pseudocode practice lab</p>
+        <h2>Turn logic into<br><span>confidence.</span></h2>
+        <p>Build the tracing habits that make coding rounds feel predictable. Practice one carefully chosen problem at a time.</p>
+      </div>
+      <div class="hero-actions">
+        <button class="btn primary" data-action="go-setup" data-mode="practice">Start practicing <span aria-hidden="true">→</span></button>
+        <button class="btn" data-action="go-setup" data-mode="timed">Timed test <span aria-hidden="true">→</span></button>
+      </div>
+      <div class="hero-card" aria-label="Today's practice summary">
+        <span class="card-label">TODAY'S FOCUS</span>
+        <strong>Loops &amp; tracing</strong>
+        <pre><span>01</span> count = 0
+<span>02</span> for i = 1 to 5
+<span>03</span>   count = count + i</pre>
+        <p>Can you predict the final value?</p>
+      </div>
+      <p class="disclaimer">Original practice material. No registration required; your progress stays in this browser.</p>
+    </div>
+
+    <div id="continueBox" class="card continue" hidden>
+      <h3>Unfinished session</h3>
+      <p id="continueInfo"></p>
+      <div class="row">
+        <button class="btn primary" data-action="continue-session">Continue</button>
+        <button class="btn ghost danger" data-action="discard-session">Discard</button>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Your progress</h3>
+        <dl class="stats" id="statsList">
+          <div><dt>Total questions</dt><dd id="statTotal">—</dd></div>
+          <div><dt>Completed attempts</dt><dd id="statAttempts">—</dd></div>
+          <div><dt>Overall accuracy</dt><dd id="statAccuracy">—</dd></div>
+        </dl>
+        <div id="emptyStats" class="empty-note">
+          <p>No attempts yet. Start a practice session and your statistics will appear here.</p>
+        </div>
+        <div id="weakTopicsBox" hidden>
+          <h4>Weakest topics <span class="muted">(min. 3 answered)</span></h4>
+          <ul id="weakTopics" class="weak-list"></ul>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Recent attempts</h3>
+        <ul id="historyList" class="history"></ul>
+        <p id="emptyHistory" class="empty-note">Your attempt history will be shown here.</p>
+        <button class="btn ghost danger" data-action="reset-progress" hidden id="resetBtn">Reset all progress…</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Topic-wise practice</h3>
+      <div id="topicGrid" class="topic-grid"></div>
+    </div>
+  </section>
+
+  <!-- ================= SETUP ================= -->
+  <section id="view-setup" class="view" aria-labelledby="setup-heading" hidden>
+    <h2 id="setup-heading">Configure session</h2>
+    <form id="setupForm" class="card setup-form" novalidate>
+      <div class="field">
+        <label for="cfgTopic">Topic</label>
+        <select id="cfgTopic" multiple size="6" aria-describedby="topicHint"></select>
+        <p id="topicHint" class="field-hint">Select one or more topics. Hold Ctrl (Windows) or Command (Mac) to select multiple.</p>
+      </div>
+      <div class="field">
+        <label for="cfgDifficulty">Difficulty</label>
+        <select id="cfgDifficulty">
+          <option value="all">All levels</option>
+          <option value="Beginner">Beginner</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="Advanced">Advanced</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="cfgMode">Mode</label>
+        <select id="cfgMode">
+          <option value="practice">Practice (untimed)</option>
+          <option value="timed">Timed test</option>
+        </select>
+      </div>
+      <fieldset class="field">
+        <legend>Number of questions</legend>
+        <div id="countRadios" class="radio-row"></div>
+      </fieldset>
+      <div class="field checkbox">
+        <input type="checkbox" id="cfgRandomize" checked>
+        <label for="cfgRandomize">Randomize question order</label>
+      </div>
+      <div class="field checkbox">
+        <input type="checkbox" id="cfgNegative">
+        <label for="cfgNegative">Negative marking (−0.25 per wrong answer)</label>
+      </div>
+      <p id="availableInfo" class="muted" aria-live="polite"></p>
+      <p id="setupError" class="error-text" role="alert" hidden></p>
+      <div class="row">
+        <button type="submit" class="btn primary">Start session</button>
+        <button type="button" class="btn ghost" data-nav="home">Cancel</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- ================= QUIZ ================= -->
+  <section id="view-quiz" class="view" aria-labelledby="quiz-heading" hidden>
+    <div class="quiz-head">
+      <h2 id="quiz-heading">Question <span id="qNum">1</span> of <span id="qTotal">—</span></h2>
+      <p id="quizMeta" class="muted"></p>
+      <div class="progress" role="progressbar" aria-labelledby="progressLabel" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBar">
+        <span id="progressLabel" class="visually-hidden">Questions answered</span>
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <div class="quiz-layout">
+      <div class="quiz-main card">
+        <div class="q-top">
+          <span class="chip" id="qDifficulty"></span>
+          <span class="chip ghost-chip" id="qTopic"></span>
+          <button class="btn ghost small" id="markBtn" aria-pressed="false">☆ Mark for review</button>
+          <button class="btn ghost small" id="bookmarkBtn" aria-pressed="false">Bookmark</button>
+        </div>
+        <p id="qPrompt" class="q-prompt"></p>
+        <pre id="qCode" class="code" tabindex="0" aria-label="Pseudocode (scrollable)"></pre>
+        <fieldset>
+          <legend class="visually-hidden">Answer options</legend>
+          <div id="options" class="options"></div>
+        </fieldset>
+        <div class="q-actions">
+          <button class="btn ghost" id="prevBtn">← Previous</button>
+          <button class="btn ghost" id="clearBtn">Clear answer</button>
+          <button class="btn" id="nextBtn">Next →</button>
+        </div>
+      </div>
+      <aside class="quiz-side card" aria-label="Question navigation">
+        <h3>Questions</h3>
+        <div id="palette" class="palette"></div>
+        <div class="palette-legend">
+          <span><i class="dot answered"></i>Answered</span>
+          <span><i class="dot unanswered"></i>Unanswered</span>
+          <span><i class="dot marked"></i>Marked</span>
+          <span><i class="dot current"></i>Current</span>
+        </div>
+        <p id="timerBox" class="timer" aria-live="off" hidden>Time left: <strong id="timerText">--:--</strong></p>
+        <button class="btn primary wide" id="submitBtn">Submit test</button>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ================= RESULTS ================= -->
+  <section id="view-results" class="view" aria-labelledby="results-heading" hidden>
+    <h2 id="results-heading">Results</h2>
+    <div id="resultsSummary" class="stat-cards"></div>
+    <div class="grid-2">
+      <div class="card"><h3>Topic-wise performance</h3><ul id="topicPerf" class="perf"></ul></div>
+      <div class="card"><h3>Difficulty-wise performance</h3><ul id="diffPerf" class="perf"></ul></div>
+    </div>
+    <h3>Question-by-question review</h3>
+    <div id="resultsReview"></div>
+    <div class="row">
+      <button class="btn primary" id="retryIncorrectBtn">Retry incorrect questions</button>
+      <button class="btn" data-action="go-setup" data-mode="practice">Start a new test</button>
+      <button class="btn ghost" data-nav="home">Back to dashboard</button>
+    </div>
+  </section>
+
+  <!-- ================= REVIEW ================= -->
+  <section id="view-review" class="view" aria-labelledby="review-heading" hidden>
+    <h2 id="review-heading">Review &amp; Revision</h2>
+    <form class="card review-filters" id="reviewFilters">
+      <div class="field">
+        <label for="rvTopic">Topic</label>
+        <select id="rvTopic"></select>
+      </div>
+      <div class="field">
+        <label for="rvDifficulty">Difficulty</label>
+        <select id="rvDifficulty">
+          <option value="all">All levels</option>
+          <option value="Beginner">Beginner</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="Advanced">Advanced</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="rvCategory">Show</label>
+        <select id="rvCategory">
+          <option value="all">All questions</option>
+          <option value="incorrect">Previously incorrect</option>
+          <option value="bookmarked">Bookmarked</option>
+          <option value="mastered">Mastered</option>
+          <option value="unmastered">Not yet mastered</option>
+        </select>
+      </div>
+    </form>
+    <p id="reviewCount" class="muted" aria-live="polite"></p>
+    <div id="reviewList"></div>
+    <button class="btn primary" id="practiseIncorrectBtn">Practise previously incorrect questions</button>
+  </section>
+
+  <!-- ================= CONVENTIONS ================= -->
+  <section id="view-conventions" class="view" aria-labelledby="conv-heading" hidden>
+    <h2 id="conv-heading">Pseudocode conventions used on this site</h2>
+    <div class="card conv-list">
+      <ul>
+        <li>Statements execute in order; assignments happen when reached.</li>
+        <li><code>FOR i = a TO b</code> is <strong>inclusive</strong> of both <code>a</code> and <code>b</code>, stepping by 1. <code>STEP -1</code> steps down by 1.</li>
+        <li><code>/</code> between integers is <strong>integer division truncating toward zero</strong> (e.g. <code>7 / 2 = 3</code>).</li>
+        <li><code>MOD</code> is the remainder after integer division (e.g. <code>17 MOD 5 = 2</code>); questions using negatives state the convention in the prompt.</li>
+        <li><code>AND</code>, <code>OR</code>, <code>NOT</code> follow standard Boolean logic and <strong>short-circuit</strong>: the right side is not evaluated if the left side already decides the result.</li>
+        <li><code>BREAK</code> exits the innermost loop; <code>CONTINUE</code> jumps to the next iteration of the innermost loop.</li>
+        <li>Arrays and strings are <strong>0-indexed</strong> unless the question explicitly says otherwise.</li>
+        <li>Functions receive arguments <strong>by value</strong> (changes to parameters don't affect the caller's variables) and return a single value via <code>RETURN</code>.</li>
+        <li>Recursion questions always show the base case explicitly.</li>
+        <li><code>PRINT x</code> outputs the value of x; multiple prints appear in output order.</li>
+      </ul>
+      <p class="muted">Students trace the pseudocode manually — this site does not execute pseudocode. All questions are original practice material and are not affiliated with or endorsed by Infosys.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>PseudoPrep is an independent educational project. Practice questions are original and not affiliated with or endorsed by Infosys. Progress is stored only in your browser's localStorage and does not sync across devices.</p>
+</footer>
+
+<!-- Confirm submit dialog -->
+<dialog id="submitDialog" aria-labelledby="submitDialogTitle">
+  <h2 id="submitDialogTitle">Submit test?</h2>
+  <p id="submitDialogInfo"></p>
+  <div class="row dialog-actions">
+    <button class="btn primary" id="confirmSubmitBtn">Submit</button>
+    <button class="btn ghost" id="cancelSubmitBtn">Keep working</button>
+  </div>
+</dialog>
+
+<!-- Reset progress dialog -->
+<dialog id="resetDialog" aria-labelledby="resetDialogTitle">
+  <h2 id="resetDialogTitle">Reset all progress?</h2>
+  <p>This deletes attempt history, bookmarks, mastered questions and any saved session. It cannot be undone.</p>
+  <div class="row dialog-actions">
+    <button class="btn danger" id="confirmResetBtn">Delete everything</button>
+    <button class="btn ghost" id="cancelResetBtn">Cancel</button>
+  </div>
+</dialog>
+
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="questions.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
