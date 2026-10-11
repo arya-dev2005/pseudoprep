@@ -33,7 +33,6 @@ It is a complete, self-contained practice product:
 - 💾 **Local persistence** — progress, theme, and attempt history in `localStorage`
 - ♿ **Accessible** — semantic HTML, keyboard navigable, reduced-motion aware
 - 📱 **Responsive** — works on mobile, tablet, and desktop
-- 🌙 **Dark mode** with a persistent preference
 
 > ⚠️ **Disclaimer** — PseudoPrep is an **independent educational project**.
 > All questions are original practice material. It is **not** affiliated with,
