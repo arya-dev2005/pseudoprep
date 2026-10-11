@@ -341,6 +341,24 @@ function startSession(config) {
   persistActiveSession();
   beginQuizUI();
 }
+function enterQuizMode() {
+  document.body.classList.add("quiz-mode");
+  if (!document.fullscreenEnabled || document.fullscreenElement) return;
+  document.documentElement.requestFullscreen().catch(() => {
+    toast("Full-screen mode was unavailable. The test will continue normally.");
+  });
+}
+function exitQuizMode() {
+  document.body.classList.remove("quiz-mode");
+  if (document.fullscreenElement) {
+    document.exitFullscreen().catch(() => {
+      toast("Full-screen mode could not be closed automatically.");
+    });
+  }
+}
+document.addEventListener("fullscreenchange", () => {
+  document.body.classList.toggle("quiz-mode", Boolean(document.fullscreenElement));
+});
 function persistActiveSession() {
   if (!session || session.finished) { state.activeSession = null; saveProgress(); return; }
   state.activeSession = {
@@ -380,6 +398,7 @@ function resumeSession() {
 
 /* ---------------- quiz UI ---------------- */
 function beginQuizUI() {
+  enterQuizMode();
   showView("quiz");
   renderQuestion();
   renderPalette();
@@ -500,6 +519,7 @@ function navigateQuestion(i) {
   renderQuestion();
   renderPalette();
   persistActiveSession();
+  $("qPrompt").scrollIntoView({ block: "start", behavior: "auto" });
 }
 function toggleMark() {
   const i = session.current;
@@ -541,6 +561,7 @@ function submitTest(manual) {
   if (!session || session.finished) return; // guard: submission handled exactly once
   session.finished = true;
   stopTimer();
+  exitQuizMode();
   const timeTaken = Date.now() - session.startedAt;
   const results = computeResults(session.questions, session.answers, session.config.negative);
   lastResults = { ...results, questions: session.questions.slice(), answers: session.answers.slice(), mode: session.config.mode, timeTaken, negative: session.config.negative };

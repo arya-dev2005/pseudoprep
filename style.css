@@ -160,6 +160,11 @@ fieldset.field { border: 1px solid var(--border); border-radius: 9px; padding: .
 .progress { height: 8px; background: var(--code-bg); border-radius: 99px; overflow: hidden; margin-top: .6rem; border: 1px solid var(--border); }
 .progress-fill { height: 100%; width: 0%; background: var(--accent); transition: width .25s; }
 .quiz-layout { display: grid; grid-template-columns: 1fr 250px; gap: 1.1rem; align-items: start; }
+.quiz-mode { background: var(--bg); }
+.quiz-mode .site-header,
+.quiz-mode .site-footer { display: none; }
+.quiz-mode #app { width: min(1180px, calc(100% - 32px)); max-width: none; padding-top: 1.2rem; }
+.quiz-mode #view-quiz { min-height: 100vh; }
 .q-top { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; margin-bottom: .6rem; }
 .chip { font-size: .78rem; font-weight: 600; padding: .18rem .6rem; border-radius: 99px; background: var(--accent-soft); color: var(--accent-strong); }
 [data-theme="dark"] .chip { color: var(--accent); }
