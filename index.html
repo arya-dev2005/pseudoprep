@@ -16,6 +16,7 @@
   <nav aria-label="Primary">
     <button class="btn ghost" data-nav="home">Home</button>
     <button class="btn ghost" data-nav="review">Review</button>
+    <button class="btn ghost" data-nav="conventions">Conventions</button>
   </nav>
 </header>
 
@@ -226,6 +227,25 @@
     <button class="btn primary" id="practiseIncorrectBtn">Practise previously incorrect questions</button>
   </section>
 
+  <!-- ================= CONVENTIONS ================= -->
+  <section id="view-conventions" class="view" aria-labelledby="conv-heading" hidden>
+    <h2 id="conv-heading">Pseudocode conventions used on this site</h2>
+    <div class="card conv-list">
+      <ul>
+        <li>Statements execute in order; assignments happen when reached.</li>
+        <li><code>FOR i = a TO b</code> is <strong>inclusive</strong> of both <code>a</code> and <code>b</code>, stepping by 1. <code>STEP -1</code> steps down by 1.</li>
+        <li><code>/</code> between integers is <strong>integer division truncating toward zero</strong> (e.g. <code>7 / 2 = 3</code>).</li>
+        <li><code>MOD</code> is the remainder after integer division (e.g. <code>17 MOD 5 = 2</code>); questions using negatives state the convention in the prompt.</li>
+        <li><code>AND</code>, <code>OR</code>, <code>NOT</code> follow standard Boolean logic and <strong>short-circuit</strong>: the right side is not evaluated if the left side already decides the result.</li>
+        <li><code>BREAK</code> exits the innermost loop; <code>CONTINUE</code> jumps to the next iteration of the innermost loop.</li>
+        <li>Arrays and strings are <strong>0-indexed</strong> unless the question explicitly says otherwise.</li>
+        <li>Functions receive arguments <strong>by value</strong> (changes to parameters don't affect the caller's variables) and return a single value via <code>RETURN</code>.</li>
+        <li>Recursion questions always show the base case explicitly.</li>
+        <li><code>PRINT x</code> outputs the value of x; multiple prints appear in output order.</li>
+      </ul>
+      <p class="muted">Students trace the pseudocode manually — this site does not execute pseudocode. All questions are original practice material and are not affiliated with or endorsed by Infosys.</p>
+    </div>
+  </section>
 </main>
 
 <footer class="site-footer">

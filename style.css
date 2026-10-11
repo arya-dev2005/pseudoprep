@@ -254,6 +254,15 @@ fieldset.field { border: 1px solid var(--border); border-radius: 9px; padding: .
 .review-filters select { width: 100%; padding: .45rem; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text); }
 
 /* ---------- dialog / toast ---------- */
+.conv-list code {
+  color: var(--accent-strong);
+  background: var(--accent-soft);
+  border: 1px solid rgba(29, 107, 82, .12);
+  padding: .08rem .38rem;
+  border-radius: 5px;
+  font: 700 .86em/1.4 ui-monospace, Consolas, monospace;
+  white-space: nowrap;
+}
 dialog {
   border: 1px solid var(--border); border-radius: var(--radius);
   background: var(--surface); color: var(--text);
